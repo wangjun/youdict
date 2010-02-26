@@ -20,7 +20,7 @@
 				callback(data);
 			}
 		}
-		xhr.open('GET', 'http://toolbox.youdao.com/api/dict?keyfrom=chrome-youdao-dict&id=gecko&callback=k&q=' + word, true);
+		xhr.open('GET', 'http://toolbox.youdao.com/api/dict?keyfrom=chrome-youdao-dict&id=gecko&callback=k&q=' + encodeURIComponent(word), true);
 		xhr.send();
 	}
 	function onRequest(request, sender, callback){
