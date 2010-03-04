@@ -6,8 +6,9 @@
 	<form name="query-youdao-dict" action="#query" method="POST">
 		<input type="text" name="word" value=""/><button type="submit">GO</button>
 	</form>
-	<div id="result"></div>
+	<div style="max-width: 500px; min-width: 200px; height: auto;" id="result"></div>
     <script type="text/javascript">
+	document.forms[0].elements['word'].focus();
 	document.forms[0].onsubmit = function(){
 		var word = this.elements['word'].value;
 		if( !word ){
@@ -21,7 +22,7 @@
 		a.target = '_blank';
 
 		if( data.returnPhrase == 'null' ){
-			text = 'no such words';
+			text = 'no such words ';
 			a.href = 'http://dict.youdao.com/search?q=' + encodeURIComponent(data.originalQuery);
 			a.innerHTML = data.originalQuery;
 		}else{
@@ -34,8 +35,9 @@
 			a.innerHTML = data.returnPhrase;
 		}
 		var r = document.getElementById('result')
-		r.innerHTML = text;
+		r.innerHTML = text + '<br/>';
 		r.appendChild(a);
+		document.forms[0].elements['word'].focus();
 	}
 	</script>
   </body>
