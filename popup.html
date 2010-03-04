@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
+          "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head><title>Youdao Dictionary Extension</title></head>
+  <body>
+	<form name="query-youdao-dict" action="#query" method="POST">
+		<input type="text" name="word" value=""/><button type="submit">GO</button>
+	</form>
+	<div id="result"></div>
+    <script type="text/javascript">
+	document.forms[0].onsubmit = function(){
+		var word = this.elements['word'].value;
+		if( !word ){
+			return false;
+		}
+		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery);
+		return false;
+	}
+	function onQuery(data){
+		var a = document.createElement('a')
+		a.target = '_blank';
+
+		if( data.returnPhrase == 'null' ){
+			text = 'no such words';
+			a.href = 'http://dict.youdao.com/search?q=' + encodeURIComponent(data.originalQuery);
+			a.innerHTML = data.originalQuery;
+		}else{
+			var translate = '<p style="margin:1px; padding:0">' + data.customTranslation.content.join('<br/>') + '</p>';
+			var pronouce = data.phoneticSymbol ? '<p style="margin:1px; padding:0">[' + data.phoneticSymbol + ']</p>' : '';
+			var word = '<strong>' + data.returnPhrase + '</strong>'
+			text = word + pronouce + translate;
+
+			a.href = data.yodaoLink;
+			a.innerHTML = data.returnPhrase;
+		}
+		var r = document.getElementById('result')
+		r.innerHTML = text;
+		r.appendChild(a);
+	}
+	</script>
+  </body>
+</html>

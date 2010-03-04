@@ -4,6 +4,7 @@
   <head><title>Youdao Dictionary Extension</title></head>
   <body>
     <script type="text/javascript">
+	var dictCache = {};
 	function queryYoudaoDict(word, callback){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(data){
@@ -17,6 +18,7 @@
 				var data = JSON.parse(t);
 				//var data = eval('(' + t + ')')
 				}catch(e){alert(e); console.log(e); callback({}); return}
+				dictCache[word] = data;
 				callback(data);
 			}
 		}
@@ -25,7 +27,11 @@
 	}
 	function onRequest(request, sender, callback){
 		if( request.action == 'query-dict' ){
-			queryYoudaoDict(request.word, callback);
+			if( dictCache[request.word] ){
+				callback(dictCache[request.word]);
+			}else{
+				queryYoudaoDict(request.word, callback);
+			}
 		}
 	}
 	chrome.extension.onRequest.addListener(onRequest);
