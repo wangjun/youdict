@@ -14,9 +14,11 @@
 				var to = t.lastIndexOf('}'),
 					from = t.indexOf('{');
 				t = t.substring(from, to + 1).replace(/\\{2,}/g, '\\');
+				//t = t.replace(/'/g, '"');
+				//t = t.replace(/\\"/g, "'");
 				try{
-				var data = JSON.parse(t);
-				//var data = eval('(' + t + ')')
+				//var data = JSON.parse(t);
+				var data = eval('(' + t + ')')
 				}catch(e){alert(e); console.log(e); callback({}); return}
 				dictCache[word] = data;
 				callback(data);

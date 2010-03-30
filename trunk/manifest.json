@@ -18,5 +18,5 @@
     },
     "name": "Youdao Dictionary (by Gecko)",
     "permissions": [ "http://*/*", "https://*/*" ],
-    "version": "0.2.1"
+    "version": "0.2.3"
 }

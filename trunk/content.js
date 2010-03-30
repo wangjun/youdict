@@ -53,9 +53,12 @@ function setStyle(d){
 	s.border = '9px solid transparent';
 	s.width = 'auto';
 	s.zIndex="99998";
+	s.color = 'black';
 }
 function setStyle2(d){
 	var s = d.style;
+	s.fontSize = '12px';
+	s.textAlign = 'left';
 	s.display = 'block';
 	s.position = 'absolute';
 	s.top = pY + 8 + 'px';
