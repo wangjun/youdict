@@ -34,7 +34,7 @@ function onQuery(data){
 		a.innerHTML = data.originalQuery;
 	}else{
 		var translate = '<p style="margin:1px; padding:0">' + data.customTranslation.content.join('<br/>') + '</p>';
-		var pronouce = data.phoneticSymbol ? '<p style="margin:1px; padding:0">[' + data.phoneticSymbol + ']</p>' : '';
+		var pronouce = data.phoneticSymbol ? '<p style="margin:1px; padding:0">[' + data.phoneticSymbol + ']<embed width="17" height="17" name="plugin" src="http://dict.youdao.com/test.nobound.swf?audio=http://dict.youdao.com/speach?audio=' + data.returnPhrase + '" type="application/x-shockwave-flash" display="inline"></p>' : '';
 		var word = '<strong>' + data.returnPhrase + '</strong>'
 		text = word + pronouce + translate;
 
@@ -44,6 +44,15 @@ function onQuery(data){
 
 	c.appendChild(a);
 	d.innerHTML = text;
+
+	var close = document.createElement('button')
+	close.innerHTML = 'X'
+	close.onClick = hideDict;
+	close.style.position = 'absolute';
+	close.style.right = '0px'
+	close.style.top = '3px'
+	c.appendChild(close)
+
 	document.body.insertBefore(c, document.body.firstChild);
 }
 function setStyle(d){
@@ -67,6 +76,7 @@ function setStyle2(d){
 	s.margin = '6px';
 	s.border = '5px solid #e1c642';
 	s.setProperty('max-width', '350px');
+	s.setProperty('min-width', '120px');
 	s.setProperty("-webkit-border-radius","5px");
 	s.zIndex="99997";
 }
@@ -75,6 +85,6 @@ function hideDict(){
 		document.body.removeChild(c);
 }
 
-document.addEventListener('dblclick', showDict, false);
-document.addEventListener('click', hideDict, false);
+document.addEventListener('dblclick', showDict, true);
+document.addEventListener('click', hideDict, true);
 
