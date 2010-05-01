@@ -4,7 +4,7 @@
         "js": [ "content.js" ],
         "matches": [ "http://*/*", "https://*/*" ]
     } ],
-    "description": "用有道的api查词",
+    "description": "用有道的api查词，有音标以及读音(zh-en and en-zh dictionary by using youdao dict api",
     "browser_action": {
     	"default_icon": "favicon.ico",
 		"default_title": "有道词典",
@@ -18,5 +18,5 @@
     },
     "name": "Youdao Dictionary (by Gecko)",
     "permissions": [ "http://*/*", "https://*/*" ],
-    "version": "0.2.3"
+    "version": "0.3.1"
 }
