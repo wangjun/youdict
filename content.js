@@ -136,12 +136,12 @@ document.addEventListener('mousemove', function(event){
 	else prevWord = word;
 
 	if (timer){
-		console.log('clean')
+		//console.log('clean')
 		clearTimeout(timer);
 		timer = null;
 	}
-	if (word.length >= 1){ console.log(word); timer = setTimeout(function(){
-		console.log('showing')
+	if (word.length >= 1){ timer = setTimeout(function(){
+		//console.log('showing')
 		var s = window.getSelection();
 		s.removeAllRanges();
 		s.addRange(tr);
