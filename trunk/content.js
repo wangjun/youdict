@@ -146,6 +146,7 @@ document.addEventListener('mousemove', function(event){
 		s.removeAllRanges();
 		s.addRange(tr);
 		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery) }, 30);
+		prevWord = null;
 	}
 }, true);
 })();
