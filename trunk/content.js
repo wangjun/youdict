@@ -88,3 +88,21 @@ function hideDict(){
 document.addEventListener('dblclick', showDict, true);
 document.addEventListener('click', hideDict, true);
 
+(function(){
+
+var timer, prevC, prevO;
+document.addEventListener('mousemove', function(event){
+	if (!event.ctrlKey) return true;
+	var r = document.caretRangeFromPoint(event.clientX, event.clientY);
+	if (!r) return true;
+
+	pX = event.pageX;
+	pY = event.pageY;
+	if (timer) clearTimeout(timer)
+	var so = r.startOffset, eo = r.endOffset;
+	if (prevC === r.startContainer && prevO = so) return true
+	prevC = r.startContainer;
+	prevO = so;
+}, true);
+
+})();
