@@ -18,6 +18,7 @@ function showDict(event){
 }
 
 function onQuery(data){
+	hideDict()
 	var text;
 	var d = document.createElement('div')
 	c = d.cloneNode(true);
@@ -81,28 +82,70 @@ function setStyle2(d){
 	s.zIndex="99997";
 }
 function hideDict(){
-	if(c)
+	if(c){
 		document.body.removeChild(c);
+		c = null;
+	}
 }
 
 document.addEventListener('dblclick', showDict, true);
 document.addEventListener('click', hideDict, true);
 
 (function(){
+var timer, prevC, prevO, prevWord;
+var isAlpha = function(str){return /[a-zA-Z']+/.test(str)};
 
-var timer, prevC, prevO;
 document.addEventListener('mousemove', function(event){
-	if (!event.ctrlKey) return true;
+	if (!event.ctrlKey){
+		//hideDict();
+		return true;
+	}
 	var r = document.caretRangeFromPoint(event.clientX, event.clientY);
 	if (!r) return true;
 
 	pX = event.pageX;
 	pY = event.pageY;
-	if (timer) clearTimeout(timer)
 	var so = r.startOffset, eo = r.endOffset;
-	if (prevC === r.startContainer && prevO = so) return true
+	if (prevC === r.startContainer && prevO === so) return true
+
 	prevC = r.startContainer;
 	prevO = so;
-}, true);
+	var tr = r.cloneRange(), text='';
+	//console.log(r.startContainer, r.startOffset, r.endContainer, r.endOffset);
+	if (r.startContainer.data) while (so >= 1){
+		//console.log('start', so);
+		tr.setStart(r.startContainer, --so);
+		text = tr.toString();
+		if (!isAlpha(text.charAt(0))){
+			tr.setStart(r.startContainer, so + 1);
+			break;
+		}
+	}
+	if (r.endContainer.data) while (eo < r.endContainer.data.length){
+		//console.log('end', eo)
+		tr.setEnd(r.endContainer, ++eo);
+		text = tr.toString();
+		if (!isAlpha(text.charAt(text.length - 1))){
+			tr.setEnd(r.endContainer, eo - 1);
+			break;
+		}
+	}
 
+	var word = tr.toString();
+	if (prevWord == word) return true;
+	else prevWord = word;
+
+	if (timer){
+		console.log('clean')
+		clearTimeout(timer);
+		timer = null;
+	}
+	if (word.length >= 1){ console.log(word); timer = setTimeout(function(){
+		console.log('showing')
+		var s = window.getSelection();
+		s.removeAllRanges();
+		s.addRange(tr);
+		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery) }, 30);
+	}
+}, true);
 })();
