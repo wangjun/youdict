@@ -19,7 +19,7 @@
 				try{
 				//var data = JSON.parse(t);
 				var data = eval('(' + t + ')')
-				}catch(e){alert(e); console.log(e); callback({}); return}
+				}catch(e){/*alert(e);*/ console.log(e); callback({}); return}
 				dictCache[word] = data;
 				callback(data);
 			}
