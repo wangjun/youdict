@@ -47,7 +47,7 @@
 			window.localStorage['--settings--enable-query'] = JSON.stringify(request.enabled);
 		}
 		else if (request.action == 'check-query-enabled'){
-			callback(JSON.parse(window.localStorage['--settings--enable-query']));
+			callback(JSON.parse(window.localStorage['--settings--enable-query'] || 'true'));
 		}
 	}
 	chrome.extension.onRequest.addListener(onRequest);
