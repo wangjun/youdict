@@ -46,8 +46,12 @@ function onQuery(data){
 	close.innerHTML = 'X'
 	close.onClick = hideDict;
 	close.style.position = 'absolute';
+	close.style.display = 'block';
 	close.style.right = '0px'
 	close.style.top = '3px'
+	close.style.width = '15px'
+	close.style.padding = '0'
+	close.style.margin = '1px'
 	c.appendChild(close)
 
 	document.body.insertBefore(c, document.body.firstChild);
