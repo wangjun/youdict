@@ -1,15 +1,28 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
-          "http://www.w3.org/TR/html4/strict.dtd">
+		  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head><title>Youdao Dictionary Extension</title></head>
   <body>
+	<form name="setting-form" action="#set-profile" method="POST">
+		<input type="checkbox" id="enable-query" name="enable-query" value="1" title="(双击或者按住ctrl鼠标取词)"/>
+		<label for="enable-query" title="(双击或者按住ctrl鼠标取词)">屏幕取词</label>
+	</form>
 	<form name="query-youdao-dict" action="#query" method="POST">
 		<input type="text" name="word" value=""/><button type="submit">GO</button>
 	</form>
 	<div style="max-width: 500px; min-width: 200px; height: auto;" id="result"></div>
-    <script type="text/javascript">
-	document.forms[0].elements['word'].focus();
-	document.forms[0].onsubmit = function(){
+	<script type="text/javascript">
+	chrome.extension.sendRequest({action: 'check-query-enabled'}, function(enabled){
+		if (enabled)
+			document.getElementById('enable-query').setAttribute('checked', 'checked');
+		else
+			document.getElementById('enable-query').removeAttribute('checked');
+	});
+	document.getElementById('enable-query').onclick = function(){
+		chrome.extension.sendRequest({action: 'enable-query', enabled: this.checked});
+	}
+	document.forms["query-youdao-dict"].elements['word'].focus();
+	document.forms["query-youdao-dict"].onsubmit = function(){
 		var word = this.elements['word'].value;
 		if( !word ){
 			return false;
@@ -37,7 +50,7 @@
 		var r = document.getElementById('result')
 		r.innerHTML = text + '<br/>';
 		r.appendChild(a);
-		document.forms[0].elements['word'].focus();
+		document.forms["query-youdao-dict"].elements['word'].focus();
 	}
 	</script>
   </body>

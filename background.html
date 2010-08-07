@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"
-          "http://www.w3.org/TR/html4/strict.dtd">
+		  "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head><title>Youdao Dictionary Extension</title></head>
   <body>
-    <script type="text/javascript">
-	var dictCache = {};
+	<script type="text/javascript">
+	var dictCache = window.localStorage;
 	function queryYoudaoDict(word, callback){
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(data){
@@ -20,20 +20,34 @@
 				//var data = JSON.parse(t);
 				var data = eval('(' + t + ')')
 				}catch(e){/*alert(e);*/ console.log(e); callback({}); return}
-				dictCache[word] = data;
+				if (data.returnPhrase !== 'null'){
+					dictCache[word] = JSON.stringify(data);
+				}
 				callback(data);
 			}
 		}
 		xhr.open('GET', 'http://toolbox.youdao.com/api/dict?keyfrom=chrome-youdao-dict&id=gecko&callback=k&q=' + encodeURIComponent(word), true);
 		xhr.send();
 	}
+	var enabled = JSON.parse(window.localStorage['--settings--enable-query'] || 'true')
 	function onRequest(request, sender, callback){
 		if( request.action == 'query-dict' ){
-			if( dictCache[request.word] ){
-				callback(dictCache[request.word]);
+			if (!enabled){
+				callback(null);
+			}
+			var definition = dictCache[request.word];
+			if( definition ){
+				callback(JSON.parse(definition));
 			}else{
 				queryYoudaoDict(request.word, callback);
 			}
+		}
+		else if (request.action == 'enable-query'){
+			enabled = request.enabled;
+			window.localStorage['--settings--enable-query'] = JSON.stringify(request.enabled);
+		}
+		else if (request.action == 'check-query-enabled'){
+			callback(JSON.parse(window.localStorage['--settings--enable-query']));
 		}
 	}
 	chrome.extension.onRequest.addListener(onRequest);
