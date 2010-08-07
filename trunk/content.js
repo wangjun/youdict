@@ -1,12 +1,5 @@
 
-function YoudaoDict(){
-}
-YoudaoDict.prototype = {
-	pageX: null,
-	pageY: null,
-	showDict: showDict,
-
-}
+(function(){
 var pX, pY, c;
 
 function showDict(event){
@@ -91,13 +84,11 @@ function hideDict(){
 document.addEventListener('dblclick', showDict, true);
 document.addEventListener('click', hideDict, true);
 
-(function(){
 var timer, prevC, prevO, prevWord;
 var isAlpha = function(str){return /[a-zA-Z']+/.test(str)};
 
 document.addEventListener('mousemove', function(event){
 	if (!event.ctrlKey){
-		//hideDict();
 		return true;
 	}
 	var r = document.caretRangeFromPoint(event.clientX, event.clientY);
@@ -111,9 +102,7 @@ document.addEventListener('mousemove', function(event){
 	prevC = r.startContainer;
 	prevO = so;
 	var tr = r.cloneRange(), text='';
-	//console.log(r.startContainer, r.startOffset, r.endContainer, r.endOffset);
 	if (r.startContainer.data) while (so >= 1){
-		//console.log('start', so);
 		tr.setStart(r.startContainer, --so);
 		text = tr.toString();
 		if (!isAlpha(text.charAt(0))){
@@ -122,7 +111,6 @@ document.addEventListener('mousemove', function(event){
 		}
 	}
 	if (r.endContainer.data) while (eo < r.endContainer.data.length){
-		//console.log('end', eo)
 		tr.setEnd(r.endContainer, ++eo);
 		text = tr.toString();
 		if (!isAlpha(text.charAt(text.length - 1))){
@@ -132,21 +120,21 @@ document.addEventListener('mousemove', function(event){
 	}
 
 	var word = tr.toString();
-	if (prevWord == word) return true;
-	else prevWord = word;
+	if (prevWord == word && c) return true;
+    else if (c){
+        hideDict();
+    }
+	prevWord = word;
 
 	if (timer){
-		//console.log('clean')
 		clearTimeout(timer);
 		timer = null;
 	}
 	if (word.length >= 1){ timer = setTimeout(function(){
-		//console.log('showing')
 		var s = window.getSelection();
 		s.removeAllRanges();
 		s.addRange(tr);
 		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery) }, 30);
-		prevWord = null;
 	}
 }, true);
 })();
