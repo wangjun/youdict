@@ -11,6 +11,9 @@ function showDict(event){
 }
 
 function onQuery(data){
+	if (!data){
+		return true;
+	}
 	hideDict()
 	var text;
 	var d = document.createElement('div')
@@ -121,9 +124,9 @@ document.addEventListener('mousemove', function(event){
 
 	var word = tr.toString();
 	if (prevWord == word && c) return true;
-    else if (c){
-        hideDict();
-    }
+	else if (c){
+		hideDict();
+	}
 	prevWord = word;
 
 	if (timer){
@@ -131,10 +134,14 @@ document.addEventListener('mousemove', function(event){
 		timer = null;
 	}
 	if (word.length >= 1){ timer = setTimeout(function(){
-		var s = window.getSelection();
-		s.removeAllRanges();
-		s.addRange(tr);
-		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery) }, 30);
+		chrome.extension.sendRequest({action: 'check-query-enabled'}, function(enabled){
+				if (!enabled) return;
+				var s = window.getSelection();
+				s.removeAllRanges();
+				s.addRange(tr);
+				chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery)
+			})
+		}, 30);
 	}
 }, true);
 })();
