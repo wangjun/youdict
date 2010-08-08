@@ -32,9 +32,6 @@
 	var enabled = JSON.parse(window.localStorage['--settings--enable-query'] || 'true')
 	function onRequest(request, sender, callback){
 		if( request.action == 'query-dict' ){
-			if (!enabled){
-				callback(null);
-			}
 			var definition = dictCache[request.word];
 			if( definition ){
 				callback(JSON.parse(definition));

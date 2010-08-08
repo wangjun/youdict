@@ -3,11 +3,14 @@
 var pX, pY, c;
 
 function showDict(event){
+	chrome.extension.sendRequest({action: 'check-query-enabled'}, function(enabled){
+	if (!enabled) return true;
 	pX = event.pageX, pY = event.pageY;
 	var selection = window.getSelection(),
 		word = selection.toString().replace(/^\s+|\s+$/g, '');
 	if( word.length >= 1 )
 		chrome.extension.sendRequest({action: 'query-dict', word: word}, onQuery)
+	});
 }
 
 function onQuery(data){
