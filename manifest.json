@@ -1,22 +1,22 @@
 {
-    "background_page": "background.html",
-    "content_scripts": [ {
-        "js": [ "content.js" ],
-        "matches": [ "http://*/*", "https://*/*" ]
-    } ],
-    "description": "用有道的api查词，有音标以及读音(zh-en and en-zh dictionary by using youdao dict api",
-    "browser_action": {
-    	"default_icon": "favicon.ico",
+	"background_page": "background.html",
+	"content_scripts": [ {
+		"js": [ "content.js" ],
+		"matches": [ "http://*/*", "https://*/*" ]
+	} ],
+	"description": "用有道的api查词，有音标以及读音(zh-en and en-zh dictionary by using youdao dict api",
+	"browser_action": {
+		"default_icon": "favicon.ico",
 		"default_title": "有道词典",
 		"popup": "popup.html"
-    },
-    "icons": {
-        "128": "favicon.ico",
-        "16": "favicon.ico",
-        "32": "favicon.ico",
-        "48": "favicon.ico"
-    },
-    "name": "Youdao Dictionary (by Gecko)",
-    "permissions": [ "http://*/*", "https://*/*" ],
-    "version": "0.4.1"
+	},
+	"icons": {
+		"128": "favicon.ico",
+		"16": "favicon.ico",
+		"32": "favicon.ico",
+		"48": "favicon.ico"
+	},
+	"name": "Youdao Dictionary (by Gecko)",
+	"permissions": [ "http://*/*", "https://*/*" ],
+	"version": "0.4.1"
 }
